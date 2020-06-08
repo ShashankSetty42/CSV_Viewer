@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<div class="site-wrapper">
+  <div class="site-wrapper-inner">
+    <div class="container">
+      <div class="masthead clearfix">
+        <div class="container inner">
+          <h3 class="masthead-brand">CSV info</h3>
+        </div>
+      </div>
+      <div class="inner cover">
+        <form class="form">
+          <div class="row">
+            <div class="col">
+                <select class="custom-select">
+                  <option disabled selected>Select Tweet file</option>
+                  <option value="1">tweets_1</option>
+                  <option value="2">tweets_2</option>
+                  <option value="3">tweets_3</option>
+                </select>
+            </div>
+            <div class="col">
+              <div class="row">
+                <div class="form-check form-check-inline">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="cbox custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" for="customCheck1" name = "index" value = "true">Index</label>
+                  </div>
+                </div>
+                <div class="form-check form-check-inline">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="cbox custom-control-input" id="customCheck2">
+                    <label class="custom-control-label" for="customCheck2" name = "tid" value = "true">TweetID</label>
+                  </div>
+                </div>
+                <div class="form-check form-check-inline">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="cbox custom-control-input" id="customCheck3">
+                    <label class="custom-control-label" for="customCheck3" name = "tweet" value = "true">Tweets</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-primary" onclick="dispvalues()">Go</button>
+            </div>
+          </div>
+        </form>
+          <div class="dtable">
+
+			<!-- {{header|safe}} -->
+
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+	$('.table').hide();
+    $('.custom-select').change(function () {
+        selected_val = $(this).find("option:selected").text();
+    });
+  function dispvalues(){
+    $(".dtable").empty();
+    $('.custom-select').change(function () {
+        selected_val = $(this).find("option:selected").text();
+    });
+    var index = $('#customCheck1').is(':checked');
+    var tid = $('#customCheck2').is(':checked');
+    var tweet = $('#customCheck3').is(':checked');
+    var jsdata = [selected_val, index, tid, tweet];
+    var obj;
+    $.ajax({
+        url: '',
+        type: 'get',
+        data: {
+          'filename': selected_val,
+          'index': index,
+          'tid': tid,
+          'tweet': tweet
+        },
+        success: function(response) {
+            console.log(response.table);
+            $(".dtable").append(response.table)
+        },
+    });
+  }
+</script>
+
+{% endblock %}
